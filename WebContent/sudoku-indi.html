@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sudoku!</title>
+<style type="text/css">
+	* {
+		margin: 0px;
+		padding: 0px;
+		border: 0px;
+	}
+	html, body {
+		margin: 0; height: 100%;
+		overflow: hidden;
+		font-family: "Arial";
+	}
+	.shadow {
+		position: absolute;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: #000000;
+		opacity: 0.2;
+		cursor: not-allowed;
+		z-index: 2;
+		visibility: hidden;
+	}
+	.header {
+		margin: 10px auto;
+	}
+	.header .title {
+		font-size: 50px;
+		text-align: center;
+		user-select: none;
+	}
+	.container {
+		width: 1060px;
+		margin: 0px auto;
+	}
+	.bottomText {
+		width: 1060px;
+		margin: 20px auto 50px auto;
+		text-align: center;
+		font-size: 25px;
+		user-select: none;
+	}
+	.container>*{
+		float: left;
+	}
+	.clearFloat {
+		float: none;
+		clear: both;
+	}
+	.leftPanel {
+		margin: 0;
+		width: 140px;
+		height: 460px;
+		background-color: #dddddd;
+		border-radius: 5px;
+		padding: 10px;
+		font-size: 25px;
+		user-select: none;
+	}
+	.leftPanel .utils {
+		padding: 10px;
+		background-color: #cccccc;
+		border-radius: 5px;
+		margin-bottom: 10px;
+	}
+	.utils p {
+		font-size: 25px;
+		user-select: none;
+		text-align: center;
+	}
+	.numberPanel {
+		margin: 0px 20px;
+	}
+	.numberPanel .numberBtn {
+		width: 50px;
+		height: 50px;
+		margin: 3px;
+		position: relative;
+	}
+	.numberPanel .numberBtn div {
+		width: 100%;
+		height: 100%;
+		font-size: 30px;
+		line-height: 50px;
+		border-radius: 5px;
+		background-color: #ccccff;
+		text-align: center;
+		cursor: pointer;
+		user-select: none;
+		color: #999999;
+	}
+	.numberPanel .numberBtn div.mobile {
+		position: absolute;
+		left: 0;
+		z-index: 1;
+	}
+	.numberPanel .numberBtn div.mobile:hover {
+		background-color: #dddddd;
+	}
+	.table {
+		margin: 0;
+		border: 2px solid #000000;
+		border-spacing: 2px;
+	}
+	.table .subTable {
+		border-spacing: 0px;
+		border: 1px solid #000000;
+		float: left;
+	}
+	.table .subTable .row .entry {
+		width: 50px;
+		height: 50px;
+		border: 1px solid #cccccc;
+		font-size: 30px;
+		text-align: center;
+		float: left;
+		line-height: 50px;
+		user-select: none;
+		color: #000000;
+	}
+	.table .subTable .row .blank {
+		color: #999999;
+	}
+	.rightPanel {
+		margin: 0;
+		margin-left: 20px;
+		width: 280px;
+		height: 460px;
+		background-color: #dddddd;
+		border-radius: 5px;
+		padding: 10px;
+		font-size: 25px;
+		user-select: none;
+	}
+	.rightPanel .rankList {
+		border-radius: 5px;
+		background-color: #cccccc;
+		height: 400px;
+	}
+	.rightPanel .rankList .title {
+		padding: 5px;
+		text-align: center;
+	}
+	.rightPanel .rankList .bar {
+		width: 80%;
+		height: 2px;
+		background-color: #000000;
+		margin: 5px auto;
+	}
+	.rightPanel .rankList .rankings {
+		text-align: center;
+		color: #999999;
+		font-size: 18px;
+	}
+	.rightPanel .rankList .rankings table {
+		border-spacing: 10px 0px;
+		margin: 0px auto;
+		color: #555555;
+	}
+	.leaveBtns input {
+		width: 120px;
+		height: 50px;
+		font-size: 25px;
+		border-radius: 10px;
+		margin: 10px;
+		background-color: #00ff00;
+		cursor: pointer;
+		outline: none;
+	}
+	.leftPanel .leaveBtns input {
+		margin: 0 10px 10px 10px;
+	}
+	.leaveBtns input:hover {
+		color: #ff0000;
+		background-color: #99ff99;
+	}
+	.leaveBtns input:active {
+		position:relative;
+    	top:1px;
+    	left: 1px;
+	}
+	.leaveBtns .disabled {
+		background-color: #dddddd;
+		color: #999999;
+		cursor: not-allowed;
+	}
+	.keyboard {
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		background-color: #eeeeee;
+		padding: 5px;
+		border-radius: 0 10px 10px 10px;
+		border: 1px solid #999999;
+		opacity: 0.9;
+		visibility: hidden;
+	}
+	.keyboard .btn {
+		width: 30px;
+		height: 30px;
+		margin: 3px;
+		background-color: #cccccc;
+		border-radius: 5px;
+		font-size: 18px;
+		font-weight: bolder;
+		cursor: pointer;
+		user-select: false;
+		outline: none;
+	}
+	.keyboard .btn:hover {
+		color: #ff0000;
+	}
+	.keyboard .cue {
+		width: 102px;
+	}
+	.keyboard .triangle-left {
+		border-left: 10px solid #555;
+		border-bottom: 10px solid transparent;
+		margin-top: -6px;
+		margin-left: -6px;
+	}
+	.error {
+		background-color: rgb(255,150,150) !important;
+	}
+	.notification {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 250px;
+		height: 150px;
+		margin-left: -125px;
+		margin-top: -75px;
+		padding: 20px;
+		background-color: #ffffff;
+		border-radius: 10px;
+		text-align: center;
+		visibility: hidden;
+		z-index: 3;
+		user-select: none;
+		box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+	}
+	.notification p {
+		font-size: 25px;
+		text-align: center;
+	}
+	.notification button {
+		margin-top: 20px;
+		font-size: 25px;
+		background-color: #00ff00;
+		width: 120px;
+		height: 50px;
+		border-radius: 10px;
+		cursor: pointer;
+		outline: none;
+	}
+	.notification button:hover {
+		color: #ff0000;
+		background-color: #99ff99;
+	}
+	.notification button:active {
+		position:relative;
+    	top:1px;
+    	left: 1px;
+	}
+</style>
+</head>
+<body>
+
+	<!-- 屏蔽窗口 -->
+	<div class="shadow"></div>
+	
+	<div class="header">
+		<p class="title">Individual Mode - Level<span> 1 </span></p>
+	</div>
+	<div class="container">
+		<div class="leftPanel">
+			<!-- User -->
+			<div class="utils">
+				<p>Welcome</p>
+				<p style="color: #666666; font-style: italic;">fding33</p>
+			</div>
+			<!-- Timer -->
+			<div class="utils">
+				<p>Timer</p>
+				<p style="color: #0000ff" id="timeDisplay">00:00</p>
+			</div>
+			<!-- Cues -->
+			<div class="utils cuesLeft">
+				<p>Cue</p>
+				<p><span id="numCues" style="background-color: #cccccc; border-radius: 5px;"></span></p>
+			</div>
+			<div class="leaveBtns">
+				<form action=""><input type="button" value="Pause"/></form>
+				<form action=""><input type="submit" value="Reset"/></form>
+				<form action=""><input type="submit" value="Menu"/></form>
+				<div class="clearFloat"></div>
+			</div>
+		</div>
+		
+		<!-- Select Panel -->
+		<div class="numberPanel">
+			<div class="numberBtn"><div class="mobile" value="1">1</div><div>1</div></div>
+			<div class="numberBtn"><div class="mobile" value="2">2</div><div>2</div></div>
+			<div class="numberBtn"><div class="mobile" value="3">3</div><div>3</div></div>
+			<div class="numberBtn"><div class="mobile" value="4">4</div><div>4</div></div>
+			<div class="numberBtn"><div class="mobile" value="5">5</div><div>5</div></div>
+			<div class="numberBtn"><div class="mobile" value="6">6</div><div>6</div></div>
+			<div class="numberBtn"><div class="mobile" value="7">7</div><div>7</div></div>
+			<div class="numberBtn"><div class="mobile" value="8">8</div><div>8</div></div>
+			<div class="numberBtn"><div class="mobile" value="9">9</div><div>9</div></div>
+		</div>
+		
+		<!-- Sudoku Game Table -->
+		<div class="table">
+			<div class="subTable">
+				<div class="row">
+					<div class="entry blank" row="0" col="0"></div>
+					<div class="entry blank" row="0" col="1"></div>
+					<div class="entry blank" row="0" col="2"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="1" col="0"></div>
+					<div class="entry blank" row="1" col="1"></div>
+					<div class="entry blank" row="1" col="2"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="2" col="0"></div>
+					<div class="entry blank" row="2" col="1"></div>
+					<div class="entry blank" row="2" col="2"></div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class="subTable">
+				<div class="row">
+					<div class="entry blank" row="0" col="3"></div>
+					<div class="entry blank" row="0" col="4"></div>
+					<div class="entry blank" row="0" col="5"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="1" col="3"></div>
+					<div class="entry blank" row="1" col="4"></div>
+					<div class="entry blank" row="1" col="5"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="2" col="3"></div>
+					<div class="entry blank" row="2" col="4"></div>
+					<div class="entry blank" row="2" col="5"></div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class="subTable">
+				<div class="row">
+					<div class="entry blank" row="0" col="6"></div>
+					<div class="entry blank" row="0" col="7"></div>
+					<div class="entry blank" row="0" col="8"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="1" col="6"></div>
+					<div class="entry blank" row="1" col="7"></div>
+					<div class="entry blank" row="1" col="8"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="2" col="6"></div>
+					<div class="entry blank" row="2" col="7"></div>
+					<div class="entry blank" row="2" col="8"></div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="subTable">
+				<div class="row">
+					<div class="entry blank" row="3" col="0"></div>
+					<div class="entry blank" row="3" col="1"></div>
+					<div class="entry blank" row="3" col="2"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="4" col="0"></div>
+					<div class="entry blank" row="4" col="1"></div>
+					<div class="entry blank" row="4" col="2"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="5" col="0"></div>
+					<div class="entry blank" row="5" col="1"></div>
+					<div class="entry blank" row="5" col="2"></div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class="subTable">
+				<div class="row">
+					<div class="entry blank" row="3" col="3"></div>
+					<div class="entry blank" row="3" col="4"></div>
+					<div class="entry blank" row="3" col="5"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="4" col="3"></div>
+					<div class="entry blank" row="4" col="4"></div>
+					<div class="entry blank" row="4" col="5"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="5" col="3"></div>
+					<div class="entry blank" row="5" col="4"></div>
+					<div class="entry blank" row="5" col="5"></div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class="subTable">
+				<div class="row">
+					<div class="entry blank" row="3" col="6"></div>
+					<div class="entry blank" row="3" col="7"></div>
+					<div class="entry blank" row="3" col="8"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="4" col="6"></div>
+					<div class="entry blank" row="4" col="7"></div>
+					<div class="entry blank" row="4" col="8"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="5" col="6"></div>
+					<div class="entry blank" row="5" col="7"></div>
+					<div class="entry blank" row="5" col="8"></div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="subTable">
+				<div class="row">
+					<div class="entry blank" row="6" col="0"></div>
+					<div class="entry blank" row="6" col="1"></div>
+					<div class="entry blank" row="6" col="2"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="7" col="0"></div>
+					<div class="entry blank" row="7" col="1"></div>
+					<div class="entry blank" row="7" col="2"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="8" col="0"></div>
+					<div class="entry blank" row="8" col="1"></div>
+					<div class="entry blank" row="8" col="2"></div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class="subTable">
+				<div class="row">
+					<div class="entry blank" row="6" col="3"></div>
+					<div class="entry blank" row="6" col="4"></div>
+					<div class="entry blank" row="6" col="5"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="7" col="3"></div>
+					<div class="entry blank" row="7" col="4"></div>
+					<div class="entry blank" row="7" col="5"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="8" col="3"></div>
+					<div class="entry blank" row="8" col="4"></div>
+					<div class="entry blank" row="8" col="5"></div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class="subTable">
+				<div class="row">
+					<div class="entry blank" row="6" col="6"></div>
+					<div class="entry blank" row="6" col="7"></div>
+					<div class="entry blank" row="6" col="8"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="7" col="6"></div>
+					<div class="entry blank" row="7" col="7"></div>
+					<div class="entry blank" row="7" col="8"></div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="row">
+					<div class="entry blank" row="8" col="6"></div>
+					<div class="entry blank" row="8" col="7"></div>
+					<div class="entry blank" row="8" col="8"></div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class="clearFloat"></div>
+		</div>
+		
+		<!-- RightPanel-->
+		<div class="rightPanel">
+			<div class="rankList">
+				<p class="title">Rank</p>
+				<div class="bar"></div>
+				<div class="rankings">
+					Shown After Completion
+				</div>
+			</div>
+			<div class="leaveBtns">
+				<form action=""><input class="disabled" style="float: left" disabled type="submit" value="Next Game" id="nextChallenge"/></form>
+				<form action=""><input type="submit" style="float: left" value="All Levels"/></form>
+				<div class="clearFloat"></div>
+			</div>
+		</div>
+		
+		<!-- 完成窗口 -->
+		<div class="notification" id="congratulation">
+			<p>Congratulations!</p>
+			<p>Time：<span id="completeTime">??:??</span></p>
+			<button id="confirmBtn">Confirm</button>
+		</div>
+		
+		<!-- 暂停窗口 -->
+		<div class="notification" id="pauseWindow">
+			<p>Pause</p>
+			<button id="continueBtn">Continue</button>
+		</div>
+	
+		<!-- clear float -->
+		<div class="clearFloat"></div>
+	</div>
+	
+	<!-- 小键盘工具 -->
+	<div class="keyboard">
+		<div class="triangle-left"></div>
+		<div class="row"><button class="btn">1</button><button class="btn">2</button><button class="btn">3</button></div>
+		<div class="row"><button class="btn">4</button><button class="btn">5</button><button class="btn">6</button></div>
+		<div class="row"><button class="btn">7</button><button class="btn">8</button><button class="btn">9</button></div>
+		<div class="row"><button class="btn cue">Cue</button></div>
+	</div>
+	
+	
+	<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript">
+		//初始化数据
+		var jsonTable = {"table":
+			["  386 95 ", 
+			 " 27  9  3", 
+			 "5    3   ", 
+			 "   1    2", 
+			 "8  7  51 ", 
+			 " 52 346  ", 
+			 " 612  48 ", 
+			 "9   4   6", 
+			 " 74  513 "]};
+		var jsonAnswer = {"table":
+			["413862957", 
+			 "627519843", 
+			 "598473261", 
+			 "746158392", 
+			 "839726514", 
+			 "152934678", 
+			 "361297485", 
+			 "985341726", 
+			 "274685139"]};
+		//填充空位
+		var table = jsonTable.table;
+		for (var i = 0; i < table.length; i++) {
+			for (var j = 0; j < table[i].length; j++) {
+				var val = table[i].charAt(j);
+				if (val != " ") {
+					var elem = $("div.entry[row=" + i + "][col=" + j + "]");
+					elem.text(val);
+					elem.removeClass("blank");
+				}
+			}
+		}
+		
+		//全局变量
+		var move = 0; //移动标记
+		var _x, _y; //鼠标离控件左上角的相对位置  
+		var blanks = $("div.blank"); //所有的空位置
+		var entries = $("div.entry"); //所有的位置
+		var timeRuns;
+		var completed = false;
+		var numCues = 100;
+		var startTime = (new Date()).getTime();
+		var endTime = null;
+		var accumTime = 0;
+		var selectedBlank = null;
+		var oldGame = false; //是否为以前玩过的
+		
+		var pauseBtn = $(".leaveBtns input[type='button']");
+		var nextChallengeBtn = $(".leaveBtns #nextChallenge");
+		
+		//玩过的关卡可以直接下一关
+		if (oldGame) {
+			$(nextChallengeBtn).removeAttr("disabled");
+			$(nextChallengeBtn).removeClass("disabled");
+		}
+		
+		//设置计时器每100毫秒更新一次
+		var timer = setInterval(function() {
+			updateTimer();
+		}, 100);
+		function updateTimer() {
+			endTime = (new Date()).getTime();
+			accumTime = endTime - startTime + accumTime;
+			startTime = (new Date()).getTime();
+			var min = zero(getMinutes(accumTime), 2);
+			var sec = zero(getSeconds(accumTime), 2);
+			$("#timeDisplay").text(min + ":" + sec);
+		}
+		
+		//初始更新numCues
+		updateNumCues();
+		
+		// 拖拽事件
+		for (var i = 0; i < 9; i++) {
+			var elem = $(".mobile:eq(" + i + ")");
+			$(elem).mousedown(function(e) {
+				move = parseInt($(this).attr("value"));
+				$(this).css("z-index", "9");
+				_x = e.pageX - parseInt($(elem).css("left"));
+				_y = e.pageY - parseInt($(elem).css("top"));
+			});
+			$(document).mousemove(function(e) {
+				if (move > 0) {
+					var x = e.pageX - _x;//控件左上角到屏幕左上角的相对位置
+					var y = e.pageY - _y;
+					$(".mobile:eq(" + (move - 1) + ")").css({
+						"top" : y,
+						"left" : x
+					});
+				}
+			}).mouseup(function(e) {
+				if (move > 0) {
+					$(".mobile:eq(" + (move - 1) + ")").css({
+						"top" : 0,
+						"left" : 0,
+						"z-index" : 1
+					});
+					if (!completed) {
+						drop(move, e.pageX, e.pageY);
+						
+					}
+					move = 0;
+				}
+			});
+		}
+		
+		//点击删除或选中事件 //滑过事件
+		for (var i = 0; i < blanks.length; i++) {
+			var blank = blanks[i];
+			$(blank).click(function(e) {
+				if (!completed && $(this).attr("cued") != "true") {
+					if ($(this).text() != "?" && $(this).text() != "X") { // 已经填写的要删除
+						if (numCues > 0) {
+							$(this).text("?");
+						} else {
+							$(this).text("X");
+						}
+					} else { // 未填写的点击后开启小键盘
+						selectedBlank = this;
+						//计算单击位置
+						var x = e.pageX - parseInt($(elem).css("left"));
+						var y = e.pageY - parseInt($(elem).css("top"));
+						openKeyboard(x,y);
+					}
+				}
+			});
+			$(blank).mouseover(function() {
+				$(this).css("background-color", "#dddddd");
+				if($(this).text() == "") {
+					if (numCues > 0) {
+						$(this).text("?");
+					} else {
+						$(this).text("X");
+					}
+				}
+			});
+			$(blank).mouseout(function() {
+				$(this).css("background-color", "");
+				if ($(this).text() == "?" || $(this).text() == "X") {
+					$(this).text("");
+				}
+			});
+			
+			//GameTable和小菜单内右键菜单失活
+			 $(".table,.keyboard,.numberPanel").bind("contextmenu",function(e){
+                return false;
+            });
+			//右键点击空内提示事件
+			$(blank).contextmenu( makeDoubleRightClickHandler( function(e) {
+			    offerCue(this);
+			}));
+		}
+		
+		//提供提示
+		function offerCue(selected) {
+			if (!completed && $(selected).attr("cued") != "true") {
+		    	if (numCues <= 0) {
+		    		blink($(".cuesLeft"));
+		    	} else {
+			        numCues --;
+			        updateNumCues();
+			        var answer = getAnswer(jsonAnswer, $(selected).attr("row"), $(selected).attr("col"));
+			        $(selected).text(answer);
+			        $(selected).attr("cued", "true");
+			        $(selected).css("color", "#0000ff");
+			        completed = checkComplete();
+		    	}
+		    }
+		}
+		
+		//填充事件
+		function drop(num, mouseX, mouseY) {
+			for (var i = 0; i < blanks.length; i++) {
+				var blank = blanks[i];
+				if ($(blank).attr("cued") == "true") {
+					continue;
+				}
+				var pos = $(blank).position();
+				var left = pos.left;
+				var right = left + $(blank).width();
+				var top = pos.top;
+				var bottom = top + $(blank).height();
+				if (mouseX > left && mouseX < right && mouseY > top && mouseY < bottom) {
+					var conflictEntries = checkConflict(num, blank, entries);
+					if (conflictEntries.length == 0) {
+						$(blank).text(num);
+						//检测完成
+						completed = checkComplete();
+					} else {
+						// 闪烁
+						var elems = $(conflictEntries);
+						blink(elems);
+					}
+					break;
+				}
+			}
+		}
+		
+		// 闪烁事件
+		function blink(elems){
+			timeRuns = 0;
+			var interval = setInterval(function() {
+			    timeRuns++;
+			    if ($(elems[0]).hasClass('error')) {
+			    	$(elems).removeClass('error');
+			    } else {
+			    	$(elems).addClass("error");
+			    }
+			    if (timeRuns == 6) {
+			    	$(elems).removeClass('error');
+			        clearInterval(interval);
+			    }
+			}, 100);
+		}
+		
+		// 判断冲突
+		function checkConflict(blankVal, blank, entries) {
+			var blankRow = $(blank).attr("row");
+			var blankCol = $(blank).attr("col");
+			var blankSubMat = Math.floor(blankRow / 3) * 3 + Math.floor(blankCol / 3);
+			
+			var conflictEntries = [];
+			var count = 0;
+			
+			for (var i = 0; i < entries.length; i++) {
+				var entryRow = $(entries[i]).attr("row");
+				var entryCol = $(entries[i]).attr("col");
+				var entrySubMat = Math.floor(i / 9);
+				var entryVal = $(entries[i]).text();
+				if (entryRow == blankRow && entryCol == blankCol) {
+					continue;
+				}
+				if ((entryRow == blankRow || entryCol == blankCol || entrySubMat == blankSubMat) && entryVal == blankVal) {
+					conflictEntries[count] = entries[i];
+					count++;
+				}
+			}
+			
+			return conflictEntries;
+		}
+		
+		// 判断是否完成
+		function checkComplete() {
+			if (completed) {
+				return true;
+			}
+			var answer = jsonAnswer.table;
+			for (var i = 0; i < answer.length; i++) {
+				for (var j = 0; j < answer[i].length; j++) {
+					var answerVal = answer[i].charAt(j);
+					var responseVal = $("div.entry[row=" + i + "][col=" + j + "]").text();
+					if (answerVal != responseVal) {
+						return false;
+					}
+				}
+			}
+			// 已经完成：显示;
+			endTime = (new Date()).getTime();
+			accumTime = endTime - startTime + accumTime;
+			startTime = (new Date()).getTime();
+			clearInterval(timer);
+			$("#completeTime").text((getMinutes(accumTime) + " min " + zero(getSeconds(accumTime), 2) + " sec "));
+			$("#congratulation").css("visibility", "visible");
+			$(".shadow").css("visibility", "visible");
+			return true;
+		}
+		
+		$("#confirmBtn").click(function() {
+			$("#congratulation").css("visibility", "hidden");
+			$(".shadow").css("visibility", "hidden");
+			$(nextChallengeBtn).removeAttr("disabled");
+			$(nextChallengeBtn).removeClass("disabled");
+			$(pauseBtn).attr("disabled", "true");
+			$(pauseBtn).addClass("disabled");
+			//加载排行榜
+			loadRankList();
+		});
+		
+		// 通过提示返回答案
+		function getAnswer(jsonAnswer, row, col) {
+			return parseInt(jsonAnswer.table[row].charAt(col));
+		}
+		
+		// 更新提示次数
+		function updateNumCues() {
+			var elem = $("#numCues");
+			$(elem).html("&nbsp;" + numCues + "&nbsp;");
+			if (numCues <= 0) {
+				$(elem).css("color", "#ff0000");
+			} else {
+				$(elem).css("color", "#008000");
+			}
+		}
+		
+		// 自定义右键双击事件
+		function makeDoubleRightClickHandler( handler ) {
+		    var timeout = 0, clicked = false;
+		    return function(e) {
+
+		        e.preventDefault();
+
+		        if( clicked ) {
+		            clearTimeout(timeout);
+		            clicked = false;
+		            return handler.apply( this, arguments );
+		        }
+		        else {
+		            clicked = true;
+		            timeout = setTimeout( function() {
+		                clicked = false;
+		            }, 300 );
+		        }
+		    };
+		}
+		
+		//打开小键盘
+		function openKeyboard(x, y) {
+			$(".keyboard").css("visibility", "visible");
+			$(".keyboard").css("left", x + "px");
+			$(".keyboard").css("top", y + "px");
+		}
+		//滑出关闭小键盘
+		$(".keyboard").mouseleave(function() {
+			$(".keyboard").css("visibility", "hidden");
+		});
+		//小键盘按键点击
+		$(".keyboard .btn").on("click", function() {
+			$(".keyboard").css("visibility", "hidden");
+			val = $(this).text();
+			if ("123456789".indexOf(val) != -1) {
+				var x = $(".keyboard").css("left");
+				x = Number(x.substring(0, x.length - 2));
+				var y = $(".keyboard").css("top");
+				y = Number(y.substring(0, y.length - 2));
+				drop(Number(val), x, y);
+			} else {
+				offerCue(selectedBlank);
+			}
+		});
+		
+		//暂停功能
+		$(pauseBtn).click(function() {
+			$("#pauseWindow").css("visibility", "visible");
+			$(".shadow").css("visibility", "visible");
+			$('.table').css("filter", "blur(5px)");
+			endTime = (new Date()).getTime();
+			accumTime = endTime - startTime + accumTime;
+			startTime = (new Date()).getTime();
+			clearInterval(timer);
+		});
+		$("#continueBtn").click(function() {
+			$("#pauseWindow").css("visibility", "hidden");
+			$(".shadow").css("visibility", "hidden");
+			$('.table').css("filter", "");
+			startTime = (new Date()).getTime();
+			timer = setInterval(function() {
+				updateTimer();
+			}, 100);
+		});
+		
+		//加载排行榜
+		function loadRankList() {
+			var params = {"user": "fding33", "time": accumTime};
+			$.ajax({
+				type:"POST",
+				async:true,
+				data:params,
+				datatype:"json",
+				url:"/sudoku/GetRankListServlet",
+				success:function(result) {
+					var table = $("<table></table>");
+					table.append($("<tr><th>Rank</th><th>Time</th><th>User</th></tr>"));
+					var json = JSON.parse(result);
+					for (var i = 0; i < Math.min(json.length, 15); i++) {
+						var user = json[i];
+						var row = $("<tr></tr>");
+						row.append($("<td>" + (i + 1) + "</td>"));
+						var milisec = user.time;
+						row.append($("<td>" + zero(getMinutes(milisec), 2)
+								+ ":" + zero(getSeconds(milisec), 2)
+								+ ":" + zero(getMilisec(milisec), 3) + "</td>"));
+						row.append($("<td>" + user.user + "</td'>"));
+						table.append(row);
+					}
+					$(".rankings").html(table);
+				},
+				error:function(){
+					$(".rankings").html("<p>Connection Corrupted<p><p class=\"retry\">Click Try Again</p>");
+					$(".rankings .retry").css({"color":"#0000ff","font-style":"italic","cursor":"pointer"});
+					$(".rankings .retry").click(function() {
+						loadRankList();
+					});
+				}
+			})
+		}
+		
+		//实用函数
+		function getMinutes(miliSec) {
+			return Math.floor((miliSec / 1000) / 60);
+		}
+		
+		function getSeconds(miliSec) {
+			return Math.floor(miliSec / 1000) % 60;
+		}
+		
+		function getMilisec(miliSec) {
+			return miliSec % 1000;
+		}
+		
+		function zero(num, n) {
+			for (var i = 0; i < n - 1; i++) {
+				num = "0" + num;
+			}
+			return num.substring(num.length - n, num.length);
+		}
+		
+	</script>
+</body>
+</html>
