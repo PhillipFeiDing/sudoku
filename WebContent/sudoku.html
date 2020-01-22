@@ -266,6 +266,11 @@
     	top:1px;
     	left: 1px;
 	}
+	.levelSelect {
+		cursor: pointer;
+		color: #555555;
+		font-size: 23px;
+	}
 </style>
 </head>
 <body>
@@ -274,14 +279,19 @@
 	<div class="shadow"></div>
 	
 	<div class="header">
-		<p class="title">Individual Mode - Level<span> 1 </span></p>
+		<p class="title">Level<span id="levelDisplay">&nbsp; A01 &nbsp;</span></p>
 	</div>
 	<div class="container">
 		<div class="leftPanel">
+			<!-- Author -->
+			<div class="utils">
+				<p>Author</p>
+				<p style="color: #666666; font-style: italic;" >PhillipDing</p>
+			</div>
 			<!-- User -->
 			<div class="utils">
 				<p>Welcome</p>
-				<p style="color: #666666; font-style: italic;">fding33</p>
+				<p style="color: #666666; font-style: italic;">Visitor</p>
 			</div>
 			<!-- Timer -->
 			<div class="utils">
@@ -294,9 +304,8 @@
 				<p><span id="numCues" style="background-color: #cccccc; border-radius: 5px;"></span></p>
 			</div>
 			<div class="leaveBtns">
-				<form action=""><input type="button" value="Pause"/></form>
-				<form action=""><input type="submit" value="Reset"/></form>
-				<form action=""><input type="submit" value="Menu"/></form>
+				<form action=""><input type="button" value="Pause" class="pauseBtn"/></form>
+				<form action=""><input type="button" value="Reset" class="resetBtn"/></form>
 				<div class="clearFloat"></div>
 			</div>
 		</div>
@@ -315,213 +324,31 @@
 		</div>
 		
 		<!-- Sudoku Game Table -->
-		<div class="table">
-			<div class="subTable">
-				<div class="row">
-					<div class="entry blank" row="0" col="0"></div>
-					<div class="entry blank" row="0" col="1"></div>
-					<div class="entry blank" row="0" col="2"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="1" col="0"></div>
-					<div class="entry blank" row="1" col="1"></div>
-					<div class="entry blank" row="1" col="2"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="2" col="0"></div>
-					<div class="entry blank" row="2" col="1"></div>
-					<div class="entry blank" row="2" col="2"></div>
-					<div class="clearFloat"></div>
-				</div>
-			</div>
-			<div class="subTable">
-				<div class="row">
-					<div class="entry blank" row="0" col="3"></div>
-					<div class="entry blank" row="0" col="4"></div>
-					<div class="entry blank" row="0" col="5"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="1" col="3"></div>
-					<div class="entry blank" row="1" col="4"></div>
-					<div class="entry blank" row="1" col="5"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="2" col="3"></div>
-					<div class="entry blank" row="2" col="4"></div>
-					<div class="entry blank" row="2" col="5"></div>
-					<div class="clearFloat"></div>
-				</div>
-			</div>
-			<div class="subTable">
-				<div class="row">
-					<div class="entry blank" row="0" col="6"></div>
-					<div class="entry blank" row="0" col="7"></div>
-					<div class="entry blank" row="0" col="8"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="1" col="6"></div>
-					<div class="entry blank" row="1" col="7"></div>
-					<div class="entry blank" row="1" col="8"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="2" col="6"></div>
-					<div class="entry blank" row="2" col="7"></div>
-					<div class="entry blank" row="2" col="8"></div>
-					<div class="clearFloat"></div>
-				</div>
-			</div>
-			<div class="clearFloat"></div>
-			<div class="subTable">
-				<div class="row">
-					<div class="entry blank" row="3" col="0"></div>
-					<div class="entry blank" row="3" col="1"></div>
-					<div class="entry blank" row="3" col="2"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="4" col="0"></div>
-					<div class="entry blank" row="4" col="1"></div>
-					<div class="entry blank" row="4" col="2"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="5" col="0"></div>
-					<div class="entry blank" row="5" col="1"></div>
-					<div class="entry blank" row="5" col="2"></div>
-					<div class="clearFloat"></div>
-				</div>
-			</div>
-			<div class="subTable">
-				<div class="row">
-					<div class="entry blank" row="3" col="3"></div>
-					<div class="entry blank" row="3" col="4"></div>
-					<div class="entry blank" row="3" col="5"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="4" col="3"></div>
-					<div class="entry blank" row="4" col="4"></div>
-					<div class="entry blank" row="4" col="5"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="5" col="3"></div>
-					<div class="entry blank" row="5" col="4"></div>
-					<div class="entry blank" row="5" col="5"></div>
-					<div class="clearFloat"></div>
-				</div>
-			</div>
-			<div class="subTable">
-				<div class="row">
-					<div class="entry blank" row="3" col="6"></div>
-					<div class="entry blank" row="3" col="7"></div>
-					<div class="entry blank" row="3" col="8"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="4" col="6"></div>
-					<div class="entry blank" row="4" col="7"></div>
-					<div class="entry blank" row="4" col="8"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="5" col="6"></div>
-					<div class="entry blank" row="5" col="7"></div>
-					<div class="entry blank" row="5" col="8"></div>
-					<div class="clearFloat"></div>
-				</div>
-			</div>
-			<div class="clearFloat"></div>
-			<div class="subTable">
-				<div class="row">
-					<div class="entry blank" row="6" col="0"></div>
-					<div class="entry blank" row="6" col="1"></div>
-					<div class="entry blank" row="6" col="2"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="7" col="0"></div>
-					<div class="entry blank" row="7" col="1"></div>
-					<div class="entry blank" row="7" col="2"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="8" col="0"></div>
-					<div class="entry blank" row="8" col="1"></div>
-					<div class="entry blank" row="8" col="2"></div>
-					<div class="clearFloat"></div>
-				</div>
-			</div>
-			<div class="subTable">
-				<div class="row">
-					<div class="entry blank" row="6" col="3"></div>
-					<div class="entry blank" row="6" col="4"></div>
-					<div class="entry blank" row="6" col="5"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="7" col="3"></div>
-					<div class="entry blank" row="7" col="4"></div>
-					<div class="entry blank" row="7" col="5"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="8" col="3"></div>
-					<div class="entry blank" row="8" col="4"></div>
-					<div class="entry blank" row="8" col="5"></div>
-					<div class="clearFloat"></div>
-				</div>
-			</div>
-			<div class="subTable">
-				<div class="row">
-					<div class="entry blank" row="6" col="6"></div>
-					<div class="entry blank" row="6" col="7"></div>
-					<div class="entry blank" row="6" col="8"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="7" col="6"></div>
-					<div class="entry blank" row="7" col="7"></div>
-					<div class="entry blank" row="7" col="8"></div>
-					<div class="clearFloat"></div>
-				</div>
-				<div class="row">
-					<div class="entry blank" row="8" col="6"></div>
-					<div class="entry blank" row="8" col="7"></div>
-					<div class="entry blank" row="8" col="8"></div>
-					<div class="clearFloat"></div>
-				</div>
-			</div>
-			<div class="clearFloat"></div>
+		<div class="tableContainer">
+
 		</div>
 		
 		<!-- RightPanel-->
 		<div class="rightPanel">
 			<div class="rankList">
-				<p class="title">Rank</p>
-				<div class="bar"></div>
-				<div class="rankings">
-					Shown After Completion
+				<p class="title">Levels</p>
+				<div class="bar" style="margin-bottom: 15px;"></div>
+				<div class="levelContainer">
+	
 				</div>
 			</div>
 			<div class="leaveBtns">
-				<form action=""><input class="disabled" style="float: left" disabled type="submit" value="Next Game" id="nextChallenge"/></form>
-				<form action=""><input type="submit" style="float: left" value="All Levels"/></form>
+				<form action=""><input style="float: left" type="button" value="<-" id="prevButton"/></form>
+				<form action=""><input type="button" style="float: left" value="->" id="nextButton"/></form>
 				<div class="clearFloat"></div>
 			</div>
 		</div>
 		
 		<!-- 完成窗口 -->
 		<div class="notification" id="congratulation">
-			<p>Congratulations!</p>
-			<p>Time：<span id="completeTime">??:??</span></p>
-			<button id="confirmBtn">Confirm</button>
+			<p>Well Done!</p>
+			<p>Finish：<span id="completeTime">??:??</span></p>
+			<button id="confirmBtn">OK</button>
 		</div>
 		
 		<!-- 暂停窗口 -->
@@ -545,40 +372,20 @@
 	
 	
 	<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="resources/htmlTable.js"></script>
+	<script type="text/javascript" src="resources/jsonAllLevel.js"></script>
+	<script type="text/javascript" src="resources/htmlLevelPages.js"></script>
 	<script type="text/javascript">
-		//初始化数据
+		//初始化数据 默认 第一关
 		var jsonTable = {"table":
-			["  386 95 ", 
-			 " 27  9  3", 
-			 "5    3   ", 
-			 "   1    2", 
-			 "8  7  51 ", 
-			 " 52 346  ", 
-			 " 612  48 ", 
-			 "9   4   6", 
-			 " 74  513 "]};
+			levelDB[0].puzzle};
 		var jsonAnswer = {"table":
-			["413862957", 
-			 "627519843", 
-			 "598473261", 
-			 "746158392", 
-			 "839726514", 
-			 "152934678", 
-			 "361297485", 
-			 "985341726", 
-			 "274685139"]};
-		//填充空位
-		var table = jsonTable.table;
-		for (var i = 0; i < table.length; i++) {
-			for (var j = 0; j < table[i].length; j++) {
-				var val = table[i].charAt(j);
-				if (val != " ") {
-					var elem = $("div.entry[row=" + i + "][col=" + j + "]");
-					elem.text(val);
-					elem.removeClass("blank");
-				}
-			}
-		}
+			levelDB[0].solution};
+		
+		//初局
+		var currentLevel = 1;
+		var currentPage = 1;
+		repaintGrid(currentLevel);
 		
 		//全局变量
 		var move = 0; //移动标记
@@ -587,21 +394,15 @@
 		var entries = $("div.entry"); //所有的位置
 		var timeRuns;
 		var completed = false;
-		var numCues = 100;
+		var maxNumCues = 10;
+		var numCues = maxNumCues;
 		var startTime = (new Date()).getTime();
 		var endTime = null;
 		var accumTime = 0;
 		var selectedBlank = null;
-		var oldGame = false; //是否为以前玩过的
 		
-		var pauseBtn = $(".leaveBtns input[type='button']");
-		var nextChallengeBtn = $(".leaveBtns #nextChallenge");
-		
-		//玩过的关卡可以直接下一关
-		if (oldGame) {
-			$(nextChallengeBtn).removeAttr("disabled");
-			$(nextChallengeBtn).removeClass("disabled");
-		}
+		var pauseBtn = $(".leaveBtns .pauseBtn");
+		var resetBtn = $(".leaveBtns .resetBtn")
 		
 		//设置计时器每100毫秒更新一次
 		var timer = setInterval(function() {
@@ -615,96 +416,145 @@
 			var sec = zero(getSeconds(accumTime), 2);
 			$("#timeDisplay").text(min + ":" + sec);
 		}
-		
-		//初始更新numCues
+
+		// 初始更新
 		updateNumCues();
+
+		// 初始动态效果
+		animateCells();
+
+		// 第一页
+		$('.levelContainer').html(pages[currentPage - 1]);
 		
-		// 拖拽事件
-		for (var i = 0; i < 9; i++) {
-			var elem = $(".mobile:eq(" + i + ")");
-			$(elem).mousedown(function(e) {
-				move = parseInt($(this).attr("value"));
-				$(this).css("z-index", "9");
-				_x = e.pageX - parseInt($(elem).css("left"));
-				_y = e.pageY - parseInt($(elem).css("top"));
-			});
-			$(document).mousemove(function(e) {
-				if (move > 0) {
-					var x = e.pageX - _x;//控件左上角到屏幕左上角的相对位置
-					var y = e.pageY - _y;
-					$(".mobile:eq(" + (move - 1) + ")").css({
-						"top" : y,
-						"left" : x
-					});
-				}
-			}).mouseup(function(e) {
-				if (move > 0) {
-					$(".mobile:eq(" + (move - 1) + ")").css({
-						"top" : 0,
-						"left" : 0,
-						"z-index" : 1
-					});
-					if (!completed) {
-						drop(move, e.pageX, e.pageY);
-						
-					}
-					move = 0;
-				}
+		enableLevelSelect();
+		function enableLevelSelect() {
+			$('.levelSelect').on('click', (e) => {
+				currentLevel = parseInt(e.target.id.substring(5))
+				$("#levelDisplay").html(e.target.innerHTML)
+				resetBtn.click()
 			});
 		}
+
+		$('#prevButton').click(() => {
+			currentPage = Math.max(1, currentPage - 1);
+			$('.levelContainer').html(pages[currentPage - 1]);
+			enableLevelSelect();
+		})
+		$('#nextButton').click(() => {
+			currentPage = Math.min(pages.length, currentPage + 1);
+			$('.levelContainer').html(pages[currentPage - 1]);
+			enableLevelSelect();
+		})
 		
-		//点击删除或选中事件 //滑过事件
-		for (var i = 0; i < blanks.length; i++) {
-			var blank = blanks[i];
-			$(blank).click(function(e) {
-				if (!completed && $(this).attr("cued") != "true") {
-					if ($(this).text() != "?" && $(this).text() != "X") { // 已经填写的要删除
+		function animateCells() {
+			// 拖拽事件
+			for (var i = 0; i < 9; i++) {
+				var elem = $(".mobile:eq(" + i + ")");
+				$(elem).mousedown(function(e) {
+					move = parseInt($(this).attr("value"));
+					$(this).css("z-index", "9");
+					_x = e.pageX - parseInt($(elem).css("left"));
+					_y = e.pageY - parseInt($(elem).css("top"));
+				});
+				$(document).mousemove(function(e) {
+					if (move > 0) {
+						var x = e.pageX - _x;//控件左上角到屏幕左上角的相对位置
+						var y = e.pageY - _y;
+						$(".mobile:eq(" + (move - 1) + ")").css({
+							"top" : y,
+							"left" : x
+						});
+					}
+				}).mouseup(function(e) {
+					if (move > 0) {
+						$(".mobile:eq(" + (move - 1) + ")").css({
+							"top" : 0,
+							"left" : 0,
+							"z-index" : 1
+						});
+						if (!completed) {
+							drop(move, e.pageX, e.pageY);
+							
+						}
+						move = 0;
+					}
+				});
+			}
+			
+			//点击删除或选中事件 //滑过事件
+			for (var i = 0; i < blanks.length; i++) {
+				var blank = blanks[i];
+				$(blank).click(function(e) {
+					if (!completed && $(this).attr("cued") != "true") {
+						if ($(this).text() != "?" && $(this).text() != "X") { // 已经填写的要删除
+							if (numCues > 0) {
+								$(this).text("?");
+							} else {
+								$(this).text("X");
+							}
+						} else { // 未填写的点击后开启小键盘
+							selectedBlank = this;
+							//计算单击位置
+							var x = e.pageX - parseInt($(elem).css("left"));
+							var y = e.pageY - parseInt($(elem).css("top"));
+							openKeyboard(x,y);
+						}
+					}
+				});
+				$(blank).mouseover(function() {
+					$(this).css("background-color", "#dddddd");
+					if($(this).text() == "") {
 						if (numCues > 0) {
 							$(this).text("?");
 						} else {
 							$(this).text("X");
 						}
-					} else { // 未填写的点击后开启小键盘
-						selectedBlank = this;
-						//计算单击位置
-						var x = e.pageX - parseInt($(elem).css("left"));
-						var y = e.pageY - parseInt($(elem).css("top"));
-						openKeyboard(x,y);
+					}
+				});
+				$(blank).mouseout(function() {
+					$(this).css("background-color", "");
+					if ($(this).text() == "?" || $(this).text() == "X") {
+						$(this).text("");
+					}
+				});
+				
+				//GameTable和小菜单内右键菜单失活
+				$(".table,.keyboard,.numberPanel").bind("contextmenu",function(e){
+					return false;
+				});
+				//右键点击空内提示事件
+				$(blank).contextmenu( makeDoubleRightClickHandler( function(e) {
+					offerCue(this);
+				}));
+			}
+		}
+		
+		//绘制数独方格
+		function repaintGrid(level) {
+			// 画数独方格
+			$('.tableContainer').html(htmlTable);
+			// 重置数据
+			jsonTable.table = levelDB[level - 1].puzzle;
+			jsonAnswer.table = levelDB[level - 1].solution;
+			//填充空位
+			var table = jsonTable.table;
+			for (var i = 0; i < table.length; i++) {
+				for (var j = 0; j < table[i].length; j++) {
+					var val = table[i].charAt(j);
+					if (val != " ") {
+						var elem = $("div.entry[row=" + i + "][col=" + j + "]");
+						elem.text(val);
+						elem.removeClass("blank");
 					}
 				}
-			});
-			$(blank).mouseover(function() {
-				$(this).css("background-color", "#dddddd");
-				if($(this).text() == "") {
-					if (numCues > 0) {
-						$(this).text("?");
-					} else {
-						$(this).text("X");
-					}
-				}
-			});
-			$(blank).mouseout(function() {
-				$(this).css("background-color", "");
-				if ($(this).text() == "?" || $(this).text() == "X") {
-					$(this).text("");
-				}
-			});
-			
-			//GameTable和小菜单内右键菜单失活
-			 $(".table,.keyboard,.numberPanel").bind("contextmenu",function(e){
-                return false;
-            });
-			//右键点击空内提示事件
-			$(blank).contextmenu( makeDoubleRightClickHandler( function(e) {
-			    offerCue(this);
-			}));
+			}
 		}
 		
 		//提供提示
 		function offerCue(selected) {
 			if (!completed && $(selected).attr("cued") != "true") {
 		    	if (numCues <= 0) {
-		    		blink($(".cuesLeft"));
+		    		// blink($(".cuesLeft"));
 		    	} else {
 			        numCues --;
 			        updateNumCues();
@@ -808,7 +658,7 @@
 			accumTime = endTime - startTime + accumTime;
 			startTime = (new Date()).getTime();
 			clearInterval(timer);
-			$("#completeTime").text((getMinutes(accumTime) + " min " + zero(getSeconds(accumTime), 2) + " sec "));
+			$("#completeTime").text((getMinutes(accumTime) + "' " + zero(getSeconds(accumTime), 2) + "'' "));
 			$("#congratulation").css("visibility", "visible");
 			$(".shadow").css("visibility", "visible");
 			return true;
@@ -817,12 +667,6 @@
 		$("#confirmBtn").click(function() {
 			$("#congratulation").css("visibility", "hidden");
 			$(".shadow").css("visibility", "hidden");
-			$(nextChallengeBtn).removeAttr("disabled");
-			$(nextChallengeBtn).removeClass("disabled");
-			$(pauseBtn).attr("disabled", "true");
-			$(pauseBtn).addClass("disabled");
-			//加载排行榜
-			loadRankList();
 		});
 		
 		// 通过提示返回答案
@@ -888,6 +732,7 @@
 		});
 		
 		//暂停功能
+		$(pauseBtn).disabled = false;
 		$(pauseBtn).click(function() {
 			$("#pauseWindow").css("visibility", "visible");
 			$(".shadow").css("visibility", "visible");
@@ -901,47 +746,33 @@
 			$("#pauseWindow").css("visibility", "hidden");
 			$(".shadow").css("visibility", "hidden");
 			$('.table').css("filter", "");
+			if (!completed) {
+				startTime = (new Date()).getTime();
+				clearInterval(timer);
+				timer = setInterval(function() {
+					updateTimer();
+				}, 100);
+			}
+		});
+		// 重置功能
+		$(resetBtn).click(function() {
+			repaintGrid(currentLevel);
+			blanks = $("div.blank"); //所有的空位置
+			entries = $("div.entry"); //所有的位置
+			completed = false;
+			numCues = maxNumCues;
 			startTime = (new Date()).getTime();
+			endTime = null;
+			accumTime = 0;
+			selectedBlank = null;
+			updateNumCues();
+			animateCells();
+			// 重置计时器
+			clearInterval(timer);
 			timer = setInterval(function() {
 				updateTimer();
 			}, 100);
-		});
-		
-		//加载排行榜
-		function loadRankList() {
-			var params = {"user": "fding33", "time": accumTime};
-			$.ajax({
-				type:"POST",
-				async:true,
-				data:params,
-				datatype:"json",
-				url:"/sudoku/GetRankListServlet",
-				success:function(result) {
-					var table = $("<table></table>");
-					table.append($("<tr><th>Rank</th><th>Time</th><th>User</th></tr>"));
-					var json = JSON.parse(result);
-					for (var i = 0; i < Math.min(json.length, 15); i++) {
-						var user = json[i];
-						var row = $("<tr></tr>");
-						row.append($("<td>" + (i + 1) + "</td>"));
-						var milisec = user.time;
-						row.append($("<td>" + zero(getMinutes(milisec), 2)
-								+ ":" + zero(getSeconds(milisec), 2)
-								+ ":" + zero(getMilisec(milisec), 3) + "</td>"));
-						row.append($("<td>" + user.user + "</td'>"));
-						table.append(row);
-					}
-					$(".rankings").html(table);
-				},
-				error:function(){
-					$(".rankings").html("<p>Connection Corrupted<p><p class=\"retry\">Click Try Again</p>");
-					$(".rankings .retry").css({"color":"#0000ff","font-style":"italic","cursor":"pointer"});
-					$(".rankings .retry").click(function() {
-						loadRankList();
-					});
-				}
-			})
-		}
+		})
 		
 		//实用函数
 		function getMinutes(miliSec) {
